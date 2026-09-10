@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quote Requests – CARTEL MULTI-ENGINEERING LTD</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0a1628;
+      --accent: #00a8e8;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --gray: #64748b;
+      --light: #f1f5f9;
+      --border: #e2e8f0;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #f8fafc;
+      color: #1e293b;
+      min-height: 100vh;
+    }
+    .login-wrap {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    .login-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 2.5rem;
+      width: 100%;
+      max-width: 380px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+    }
+    .login-card h1 {
+      font-size: 1.35rem;
+      margin-bottom: 0.35rem;
+      color: var(--primary);
+    }
+    .login-card p {
+      color: var(--gray);
+      font-size: 0.9rem;
+      margin-bottom: 1.75rem;
+    }
+    .form-group { margin-bottom: 1.25rem; }
+    label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-bottom: 0.4rem;
+    }
+    input[type="password"], input[type="text"] {
+      width: 100%;
+      padding: 0.7rem 0.9rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-family: inherit;
+    }
+    input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(0,168,232,0.15);
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.7rem 1.25rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      width: 100%;
+    }
+    .btn-primary:hover { background: #0090c8; }
+    .btn-sm {
+      padding: 0.35rem 0.7rem;
+      font-size: 0.8rem;
+    }
+    .error {
+      color: var(--danger);
+      font-size: 0.85rem;
+      margin-top: 0.75rem;
+      display: none;
+    }
+
+    /* Dashboard */
+    .dashboard { display: none; }
+    header {
+      background: var(--primary);
+      color: #fff;
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    header h1 { font-size: 1.15rem; font-weight: 600; }
+    header .meta { font-size: 0.85rem; opacity: 0.8; }
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.75rem;
+    }
+    .stat-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 1.15rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+      border: 1px solid var(--border);
+    }
+    .stat-card .num {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .stat-card .label {
+      font-size: 0.8rem;
+      color: var(--gray);
+      margin-top: 0.15rem;
+    }
+    .filters {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.25rem;
+    }
+    .filter-btn {
+      padding: 0.4rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #fff;
+      font-size: 0.85rem;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .filter-btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+    .quote-list { display: flex; flex-direction: column; gap: 1rem; }
+    .quote-card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      padding: 1.25rem 1.4rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .quote-card.unread { border-left: 4px solid var(--accent); }
+    .quote-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .quote-top h3 { font-size: 1.05rem; }
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .badge-new { background: #dbeafe; color: #1d4ed8; }
+    .badge-contacted { background: #fef3c7; color: #b45309; }
+    .badge-quoted { background: #d1fae5; color: #047857; }
+    .badge-closed { background: #f1f5f9; color: #64748b; }
+    .quote-meta {
+      font-size: 0.85rem;
+      color: var(--gray);
+      margin-bottom: 0.6rem;
+    }
+    .quote-meta a { color: var(--accent); text-decoration: none; }
+    .quote-meta a:hover { text-decoration: underline; }
+    .quote-message {
+      background: var(--light);
+      border-radius: 8px;
+      padding: 0.85rem 1rem;
+      font-size: 0.92rem;
+      line-height: 1.55;
+      white-space: pre-wrap;
+      margin-bottom: 1rem;
+    }
+    .quote-actions {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .empty {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--gray);
+    }
+    .logout-btn {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.3);
+      color: #fff;
+      padding: 0.4rem 0.9rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-family: inherit;
+    }
+    .logout-btn:hover { background: rgba(255,255,255,0.1); }
+  </style>
+</head>
+<body>
+  <!-- LOGIN -->
+  <div class="login-wrap" id="loginScreen">
+    <div class="login-card">
+      <h1>CARTEL MULTI-ENGINEERING</h1>
+      <p>Admin – View Quote Requests</p>
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="password">Admin Password</label>
+          <input type="password" id="password" required autocomplete="current-password" placeholder="Enter password">
+        </div>
+        <button type="submit" class="btn btn-primary">Log in</button>
+        <p class="error" id="loginError">Wrong password. Try again.</p>
+      </form>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="dashboard" id="dashboard">
+    <header>
+      <div>
+        <h1>Quote Requests</h1>
+        <div class="meta" id="headerMeta">Loading…</div>
+      </div>
+      <button class="logout-btn" id="logoutBtn">Log out</button>
+    </header>
+
+    <div class="container">
+      <div class="stats" id="stats"></div>
+
+      <div class="filters">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="new">New</button>
+        <button class="filter-btn" data-filter="contacted">Contacted</button>
+        <button class="filter-btn" data-filter="quoted">Quoted</button>
+        <button class="filter-btn" data-filter="closed">Closed</button>
+      </div>
+
+      <div class="quote-list" id="quoteList"></div>
+    </div>
+  </div>
+
+  <script>
+    const API = window.location.origin;
+    let token = localStorage.getItem('cartel_admin_token') || '';
+    let allQuotes = [];
+    let currentFilter = 'all';
+
+    // Elements
+    const loginScreen = document.getElementById('loginScreen');
+    const dashboard = document.getElementById('dashboard');
+    const loginForm = document.getElementById('loginForm');
+    const loginError = document.getElementById('loginError');
+    const quoteList = document.getElementById('quoteList');
+    const statsEl = document.getElementById('stats');
+    const headerMeta = document.getElementById('headerMeta');
+
+    // Check existing token
+    if (token) {
+      showDashboard();
+      loadQuotes();
+    }
+
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      loginError.style.display = 'none';
+      const password = document.getElementById('password').value;
+      try {
+        const res = await fetch(API + '/api/admin/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password })
+        });
+        const data = await res.json();
+        if (data.success) {
+          token = data.token;
+          localStorage.setItem('cartel_admin_token', token);
+          showDashboard();
+          loadQuotes();
+        } else {
+          loginError.style.display = 'block';
+        }
+      } catch {
+        loginError.textContent = 'Cannot reach server. Is it running?';
+        loginError.style.display = 'block';
+      }
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      token = '';
+      localStorage.removeItem('cartel_admin_token');
+      dashboard.style.display = 'none';
+      loginScreen.style.display = 'flex';
+    });
+
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilter = btn.dataset.filter;
+        renderQuotes();
+      });
+    });
+
+    function showDashboard() {
+      loginScreen.style.display = 'none';
+      dashboard.style.display = 'block';
+    }
+
+    async function loadQuotes() {
+      try {
+        const res = await fetch(API + '/api/admin/quotes', {
+          headers: { 'X-Admin-Token': token }
+        });
+        if (res.status === 401) {
+          token = '';
+          localStorage.removeItem('cartel_admin_token');
+          dashboard.style.display = 'none';
+          loginScreen.style.display = 'flex';
+          return;
+        }
+        const data = await res.json();
+        allQuotes = data.quotes || [];
+        renderStats();
+        renderQuotes();
+        headerMeta.textContent = allQuotes.length + ' total request' + (allQuotes.length !== 1 ? 's' : '');
+      } catch (err) {
+        quoteList.innerHTML = '<div class="empty">Failed to load requests. Check server.</div>';
+      }
+    }
+
+    function renderStats() {
+      const counts = { new: 0, contacted: 0, quoted: 0, closed: 0 };
+      allQuotes.forEach(q => { if (counts[q.status] !== undefined) counts[q.status]++; });
+      statsEl.innerHTML = `
+        <div class="stat-card"><div class="num">${allQuotes.length}</div><div class="label">Total</div></div>
+        <div class="stat-card"><div class="num">${counts.new}</div><div class="label">New</div></div>
+        <div class="stat-card"><div class="num">${counts.contacted}</div><div class="label">Contacted</div></div>
+        <div class="stat-card"><div class="num">${counts.quoted}</div><div class="label">Quoted</div></div>
+        <div class="stat-card"><div class="num">${counts.closed}</div><div class="label">Closed</div></div>
+      `;
+    }
+
+    function renderQuotes() {
+      let list = allQuotes;
+      if (currentFilter !== 'all') {
+        list = allQuotes.filter(q => q.status === currentFilter);
+      }
+
+      if (list.length === 0) {
+        quoteList.innerHTML = '<div class="empty">No quote requests yet.</div>';
+        return;
+      }
+
+      quoteList.innerHTML = list.map(q => {
+        const date = new Date(q.createdAt).toLocaleString('en-GB', {
+          day: '2-digit', month: 'short', year: 'numeric',
+          hour: '2-digit', minute: '2-digit'
+        });
+        const badgeClass = 'badge-' + q.status;
+        return `
+          <article class="quote-card ${q.status === 'new' ? 'unread' : ''}" data-id="${q.id}">
+            <div class="quote-top">
+              <h3>${escapeHtml(q.name)}</h3>
+              <span class="badge ${badgeClass}">${q.status}</span>
+            </div>
+            <div class="quote-meta">
+              <a href="mailto:${escapeHtml(q.email)}">${escapeHtml(q.email)}</a>
+              ${q.phone ? ' · <a href="tel:' + escapeHtml(q.phone) + '">' + escapeHtml(q.phone) + '</a>' : ''}
+              · ${escapeHtml(q.subject)}
+              · ${date}
+            </div>
+            <div class="quote-message">${escapeHtml(q.message)}</div>
+            <div class="quote-actions">
+              <button class="btn btn-sm" style="background:#dbeafe;color:#1d4ed8" onclick="setStatus('${q.id}','new')">New</button>
+              <button class="btn btn-sm" style="background:#fef3c7;color:#b45309" onclick="setStatus('${q.id}','contacted')">Contacted</button>
+              <button class="btn btn-sm" style="background:#d1fae5;color:#047857" onclick="setStatus('${q.id}','quoted')">Quoted</button>
+              <button class="btn btn-sm" style="background:#f1f5f9;color:#64748b" onclick="setStatus('${q.id}','closed')">Closed</button>
+              <button class="btn btn-sm" style="background:#fee2e2;color:#b91c1c;margin-left:auto" onclick="deleteQuote('${q.id}')">Delete</button>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    async function setStatus(id, status) {
+      await fetch(API + '/api/admin/quotes/' + id, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Admin-Token': token
+        },
+        body: JSON.stringify({ status })
+      });
+      loadQuotes();
+    }
+
+    async function deleteQuote(id) {
+      if (!confirm('Delete this quote request permanently?')) return;
+      await fetch(API + '/api/admin/quotes/' + id, {
+        method: 'DELETE',
+        headers: { 'X-Admin-Token': token }
+      });
+      loadQuotes();
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+  </script>
+</body>
+</html>

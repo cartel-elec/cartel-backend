@@ -1,0 +1,19 @@
+{
+  "name": "cartel-multi-engineering-backend",
+  "version": "1.1.0",
+  "description": "Backend for CARTEL MULTI-ENGINEERING LTD website – receive and view quote requests + email notifications",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.0",
+    "express-rate-limit": "^7.4.0",
+    "nodemailer": "^6.9.15"
+  }
+}
