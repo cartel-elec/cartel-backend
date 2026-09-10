@@ -41,10 +41,8 @@ const ALLOWED_ORIGINS = [
 ];
 // ====================================
 
-const DATA_DIR = path.join(__dirname, 'data');
-const QUOTES_FILE = path.join(DATA_DIR, 'quotes.json');
+const QUOTES_FILE = path.join(__dirname, 'quotes.json');
 
-if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 if (!fs.existsSync(QUOTES_FILE)) fs.writeFileSync(QUOTES_FILE, '[]', 'utf8');
 
 // Middleware
