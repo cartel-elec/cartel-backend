@@ -34,6 +34,7 @@ const SMTP_PASS = process.env.SMTP_PASS || '';
 const SMTP_FROM = process.env.SMTP_FROM || SMTP_USER || 'noreply@cartel-multi-engineering.com';
 
 const ALLOWED_ORIGINS = [
+  'https://cartel-elec.github.io',
   'https://cartel-max.github.io',
   'http://localhost:5500',
   'http://127.0.0.1:5500',
