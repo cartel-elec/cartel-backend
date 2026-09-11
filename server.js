@@ -411,7 +411,7 @@ app.delete('/api/admin/quotes/:id', requireAdmin, (req, res) => {
 
 // ---------- Serve admin page ----------
 app.get('/admin', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+  res.sendFile(path.join(__dirname, 'admin.html'));
 });
 
 // Health check
